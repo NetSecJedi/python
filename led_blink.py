@@ -13,4 +13,3 @@ while True:
     GPIO.output(37, GPIO.LOW)
     GPIO.output(33, GPIO.HIGH)
     sleep(.3)
-
