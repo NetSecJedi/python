@@ -20,16 +20,16 @@ relay_status = 0
 while True: 
     print("\nTemperature: %0.1f C" % sensor.temperature)
     print("Humidity: %0.1f %%" % sensor.relative_humidity)
-    if relay_status == 0 and sensor.temperature > 32.222
+    if relay_status == 0 and sensor.temperature > 32.222:
         GPIO.output(36, GPIO.HIGH)
         relay_status = 1
         print("Cooling activated")
-    elif relay_status == 1 and sensor.temperature < 32.222
+    elif relay_status == 1 and sensor.temperature < 32.222:
         GPIO.output(36, GPIO.LOW)
         relay_status = 0
         print("Cooling Deactivated") 
     else
-        if relay_status == 1
+        if relay_status == 1:
             print("Fan Running")
         else
             print("Fan Off")     
