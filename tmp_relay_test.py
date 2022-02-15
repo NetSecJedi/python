@@ -6,10 +6,10 @@ import adafruit_sht31d
 import RPi.GPIO as GPIO
 from time import sleep
 
-# Set up the GPIO Relay using RPi board port 36 (GPIO 16) set low by default
+# Set up the GPIO Relay using pin 36 (GPIO 16) set low by default
 GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(36, GPIO.OUT, initial=GPIO.LOW)
+#GPIO.setmode(GPIO.BOARD)
+GPIO.setup(16, GPIO.OUT, initial=GPIO.LOW)
 
 # Create sensor object to read temp and humidity from SHT30
 i2c = board.I2C()
@@ -21,11 +21,11 @@ while True:
     print("\nTemperature: %0.1f C" % sensor.temperature)
     print("Humidity: %0.1f %%" % sensor.relative_humidity)
     if relay_status == 0 and sensor.temperature > 32.222:
-        GPIO.output(36, GPIO.HIGH)
+        GPIO.output(16, GPIO.HIGH)
         relay_status = 1
         print("Cooling activated")
     elif relay_status == 1 and sensor.temperature < 32.222:
-        GPIO.output(36, GPIO.LOW)
+        GPIO.output(16, GPIO.LOW)
         relay_status = 0
         print("Cooling Deactivated") 
     else:
