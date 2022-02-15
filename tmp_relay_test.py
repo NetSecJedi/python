@@ -28,10 +28,10 @@ while True:
         GPIO.output(36, GPIO.LOW)
         relay_status = 0
         print("Cooling Deactivated") 
-    else
+    else:
         if relay_status == 1:
             print("Fan Running")
-        else
+        else:
             print("Fan Off")     
 
     sleep(5)
