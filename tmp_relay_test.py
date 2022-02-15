@@ -1,5 +1,5 @@
 # Test Py script to read temperature from the AdaFruit SHT30 sensor via I2C
-# and turn close a relay switch via GPIO
+# and close a relay switch via GPIO
 
 import board
 import adafruit_sht31d
