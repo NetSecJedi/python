@@ -22,8 +22,8 @@ GPIO.setup(26, GPIO.OUT, initial=GPIO.HIGH) # An LED indicating fan off
 i2c = board.I2C()
 sensor = adafruit_sht31d.SHT31D(i2c)
 
-tmp_th_max = 19.2 # Set temperature max threshold
-tmp_th_min = 18.8 # Set temperature min threshold
+tmp_th_max = 21.5 # Set temperature max threshold
+tmp_th_min = 19.0 # Set temperature min threshold
 
 while True: 
     print("\nTemperature: %0.1f C" % sensor.temperature)
