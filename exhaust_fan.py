@@ -32,7 +32,8 @@ while True:
     relay_status = GPIO.input(16) # Check if relay is on, or set to HIGH (1)
     
     # SHT30 temperature values are in Centigrade, 32C is 90F
-    # If temp is above 32C/90F turn on the relay powering our exhaust fan
+    # If temp is above tmp_th_max turn on the relay powering our exhaust fan
+    # until temp reaches tmp_th_min
     if relay_status == 0 and sensor.temperature > tmp_th_max:
         GPIO.output(16, GPIO.HIGH)
         GPIO.output(26, GPIO.LOW)
