@@ -22,7 +22,8 @@ GPIO.setup(26, GPIO.OUT, initial=GPIO.HIGH) # An LED indicating fan off
 i2c = board.I2C()
 sensor = adafruit_sht31d.SHT31D(i2c)
 
-tmp_th = 18.7 # Set our temperature threshold
+tmp_th_max = 19.2 # Set temperature max threshold
+tmp_th_min = 18.8 # Set temperature min threshold
 
 while True: 
     print("\nTemperature: %0.1f C" % sensor.temperature)
@@ -32,12 +33,12 @@ while True:
     
     # SHT30 temperature values are in Centigrade, 32C is 90F
     # If temp is above 32C/90F turn on the relay powering our exhaust fan
-    if relay_status == 0 and sensor.temperature > tmp_th:
+    if relay_status == 0 and sensor.temperature > tmp_th_max:
         GPIO.output(16, GPIO.HIGH)
         GPIO.output(26, GPIO.LOW)
         GPIO.output(13, GPIO.HIGH)
         print("Cooling activated")
-    elif relay_status == 1 and sensor.temperature < tmp_th:
+    elif relay_status == 1 and sensor.temperature < tmp_th_min:
         GPIO.output(16, GPIO.LOW)
         GPIO.output(13, GPIO.LOW)
         GPIO.output(26, GPIO.HIGH)
