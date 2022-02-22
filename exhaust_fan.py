@@ -42,12 +42,12 @@ while True:
         GPIO.output(16, GPIO.LOW)
         GPIO.output(26, GPIO.LOW)
         GPIO.output(13, GPIO.HIGH)
-        logger.warning('Fan activated at %0.1f C' % sensor.temperature)
+        logging.warning('Fan activated at %0.1f C' % sensor.temperature)
     elif relay_status == 0 and sensor.temperature < tmp_th_min:
         GPIO.output(16, GPIO.HIGH)
         GPIO.output(13, GPIO.LOW)
         GPIO.output(26, GPIO.HIGH)
-        logger.warning('Fan Deactivated at %0.1f C' % sensor.temperature) 
+        logging.warning('Fan Deactivated at %0.1f C' % sensor.temperature) 
     else:
         if relay_status == 0:
             print("Fan Running")     
