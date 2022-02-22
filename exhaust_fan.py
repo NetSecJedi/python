@@ -12,6 +12,10 @@ import board
 import adafruit_sht31d
 import RPi.GPIO as GPIO
 from time import sleep
+import logging
+
+# Set up log file
+logging.basicConfig(filename='fan.log', encoding='utf-8', level=logging.DEBUG)
 
 GPIO.setwarnings(False) # Turn off GPIO warnings
 GPIO.setup(16, GPIO.OUT, initial=GPIO.HIGH)  # Relay Signal, board pin 36 GPIO 16, default HIGH (off)
@@ -26,10 +30,10 @@ tmp_th_max = 21.5 # Set temperature max threshold
 tmp_th_min = 19.0 # Set temperature min threshold
 
 while True: 
-    print("\nTemperature: %0.1f C" % sensor.temperature)
-    print("Humidity: %0.1f %%" % sensor.relative_humidity)
+    #print("\nTemperature: %0.1f C" % sensor.temperature)
+    #print("Humidity: %0.1f %%" % sensor.relative_humidity)
     
-    relay_status = GPIO.input(16) # Check if relay is on, or set to HIGH (1)
+    relay_status = GPIO.input(16) # Check if relay is on, or set to LOW (0)
     
     # SHT30 temperature values are in Centigrade, 32C is 90F
     # If temp is above tmp_th_max turn on the relay powering our exhaust fan
@@ -38,16 +42,14 @@ while True:
         GPIO.output(16, GPIO.LOW)
         GPIO.output(26, GPIO.LOW)
         GPIO.output(13, GPIO.HIGH)
-        print("Cooling activated")
+        logger.warning('Fan activated at %0.1f C' % sensor.temperature)
     elif relay_status == 0 and sensor.temperature < tmp_th_min:
         GPIO.output(16, GPIO.HIGH)
         GPIO.output(13, GPIO.LOW)
         GPIO.output(26, GPIO.HIGH)
-        print("Cooling Deactivated") 
+        logger.warning('Fan Deactivated at %0.1f C' % sensor.temperature) 
     else:
         if relay_status == 0:
-            print("Fan Running")
-        else:
-            print("Fan Off")     
+            print("Fan Running")     
 
     sleep(5)
