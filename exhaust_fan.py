@@ -50,6 +50,6 @@ while True:
         logging.warning('Fan Deactivated at %0.1f C' % sensor.temperature) 
     else:
         if relay_status == 0:
-            print("Fan Running")     
+            logging.INFO('Fan Running')     
 
     sleep(5)
