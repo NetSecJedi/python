@@ -14,7 +14,7 @@ import RPi.GPIO as GPIO
 from time import sleep
 
 GPIO.setwarnings(False) # Turn off GPIO warnings
-GPIO.setup(16, GPIO.OUT, initial=GPIO.LOW)  # Relay Signal, board pin 36 GPIO 16, default LOW
+GPIO.setup(16, GPIO.OUT, initial=GPIO.HIGH)  # Relay Signal, board pin 36 GPIO 16, default HIGH (off)
 GPIO.setup(13, GPIO.OUT, initial=GPIO.LOW)  # An LED indicating fan on
 GPIO.setup(26, GPIO.OUT, initial=GPIO.HIGH) # An LED indicating fan off
 
@@ -34,18 +34,18 @@ while True:
     # SHT30 temperature values are in Centigrade, 32C is 90F
     # If temp is above tmp_th_max turn on the relay powering our exhaust fan
     # until temp reaches tmp_th_min
-    if relay_status == 0 and sensor.temperature > tmp_th_max:
-        GPIO.output(16, GPIO.HIGH)
+    if relay_status == 1 and sensor.temperature > tmp_th_max:
+        GPIO.output(16, GPIO.LOW)
         GPIO.output(26, GPIO.LOW)
         GPIO.output(13, GPIO.HIGH)
         print("Cooling activated")
-    elif relay_status == 1 and sensor.temperature < tmp_th_min:
-        GPIO.output(16, GPIO.LOW)
+    elif relay_status == 0 and sensor.temperature < tmp_th_min:
+        GPIO.output(16, GPIO.HIGH)
         GPIO.output(13, GPIO.LOW)
         GPIO.output(26, GPIO.HIGH)
         print("Cooling Deactivated") 
     else:
-        if relay_status == 1:
+        if relay_status == 0:
             print("Fan Running")
         else:
             print("Fan Off")     
