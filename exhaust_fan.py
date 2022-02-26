@@ -27,7 +27,7 @@ i2c = board.I2C()
 sensor = adafruit_sht31d.SHT31D(i2c)
 
 tmp_th_max = 21.5 # Set temperature max threshold
-tmp_th_min = 19.0 # Set temperature min threshold
+tmp_th_min = 19.5 # Set temperature min threshold
 
 while True: 
     #print("\nTemperature: %0.1f C" % sensor.temperature)
@@ -49,6 +49,7 @@ while True:
         logging.warning('Fan Deactivated at %0.1f C' % temp) 
     else:
         if relay_status == 0:
-            logging.info('Fan Running')     
+            logging.info('Fan Running')
+            logging.info("Temperature: %0.1f C" % temp)     
 
     sleep(5)
