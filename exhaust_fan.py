@@ -30,8 +30,8 @@ tmp_th_max = 21.5 # Set temperature max threshold
 tmp_th_min = 19.0 # Set temperature min threshold
 
 while True: 
-    print("\nTemperature: %0.1f C" % sensor.temperature)
-    print("Humidity: %0.1f %%" % sensor.relative_humidity)
+    #print("\nTemperature: %0.1f C" % sensor.temperature)
+    #print("Humidity: %0.1f %%" % sensor.relative_humidity)
     
     relay_status = GPIO.input(16) # Check if relay is on, or set to LOW (0)
     
