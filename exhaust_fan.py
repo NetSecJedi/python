@@ -18,9 +18,9 @@ import logging
 logging.basicConfig(filename='fan.log', encoding='utf-8', level=logging.DEBUG)
 
 GPIO.setwarnings(False) # Turn off GPIO warnings
-GPIO.setup(16, GPIO.OUT, initial=GPIO.HIGH)  # Relay Signal, board pin 36 GPIO 16, default HIGH (off)
-GPIO.setup(13, GPIO.OUT, initial=GPIO.LOW)  # An LED indicating fan on
-GPIO.setup(26, GPIO.OUT, initial=GPIO.HIGH) # An LED indicating fan off
+GPIO.setup(16, GPIO.OUT, initial=GPIO.HIGH)  # Relay signal IN1, board pin 36 GPIO 16, default HIGH (off)
+GPIO.setup(25, GPIO.OUT, initial=GPIO.HIGH)  # Green LED indicating System On
+GPIO.setup(24, GPIO.OUT, initial=GPIO.LOW) # Blue LED indicating fan on
 
 # Create sensor object to read temp and humidity from SHT30
 i2c = board.I2C()
@@ -30,8 +30,8 @@ tmp_th_max = 21.5 # Set temperature max threshold
 tmp_th_min = 19.0 # Set temperature min threshold
 
 while True: 
-    #print("\nTemperature: %0.1f C" % sensor.temperature)
-    #print("Humidity: %0.1f %%" % sensor.relative_humidity)
+    print("\nTemperature: %0.1f C" % sensor.temperature)
+    print("Humidity: %0.1f %%" % sensor.relative_humidity)
     
     relay_status = GPIO.input(16) # Check if relay is on, or set to LOW (0)
     
@@ -40,13 +40,11 @@ while True:
     # until temp reaches tmp_th_min
     if relay_status == 1 and sensor.temperature > tmp_th_max:
         GPIO.output(16, GPIO.LOW)
-        GPIO.output(26, GPIO.LOW)
-        GPIO.output(13, GPIO.HIGH)
+        GPIO.output(24, GPIO.LOW)
         logging.warning('Fan activated at %0.1f C' % sensor.temperature)
     elif relay_status == 0 and sensor.temperature < tmp_th_min:
         GPIO.output(16, GPIO.HIGH)
-        GPIO.output(13, GPIO.LOW)
-        GPIO.output(26, GPIO.HIGH)
+        GPIO.output(24, GPIO.HIGH)
         logging.warning('Fan Deactivated at %0.1f C' % sensor.temperature) 
     else:
         if relay_status == 0:
