@@ -28,6 +28,16 @@ sensor = adafruit_sht31d.SHT31D(i2c)
 
 tmp_th_max = 21.5 # Set temperature max threshold
 tmp_th_min = 19.5 # Set temperature min threshold
+read_errors = 0 # track read errors
+
+# Wait for 30 seconds when 10 read errors in succession and blink Green LED in half second intervals
+def read_err_wait():
+    logging.error("Excessive errors reading temperature sensor, waiting 30 seconds....")
+    for x in range(30):
+        GPIO.output(25, GPIO.LOW)
+        sleep(0.5)
+        GPIO.output(25, GPIO.HIGH)
+        sleep(0.5)
 
 while True: 
     #print("\nTemperature: %0.1f C" % sensor.temperature)
@@ -37,7 +47,7 @@ while True:
 
     try:
         temp = sensor.temperature # read temperature value
-    
+        read_errors = 0
         # SHT30 temperature values are in Centigrade, 32C is 90F
         # If temp is above tmp_th_max turn on the relay powering our exhaust fan
         # until temp reaches tmp_th_min
@@ -55,5 +65,8 @@ while True:
                 logging.info("Temperature: %0.1f C" % temp)
     except:
         logging.error("Error reading sensor, retrying....")
+        read_errors += 1
+        if read_errors == 10:
+            read_err_wait()
 
     sleep(5)
