@@ -18,6 +18,6 @@ while True:
         logging.info("Temperature: %0.1f C" % temp)
         logging.info("Humidity: %0.1f %%" % humidity)
     except:
-        logging.ERROR("Error reading sensor, retrying....")
+        logging.error("Error reading sensor, retrying....")
 
     sleep(2)
