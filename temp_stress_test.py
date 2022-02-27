@@ -11,9 +11,10 @@ i2c = board.I2C()
 sensor = adafruit_sht31d.SHT31D(i2c)
 
 while True: 
-    temp = sensor.temperature # read temperature value   
+    temp = sensor.temperature # read temperature value 
+    humidity = sensor.humidity  
 
     logging.info("Temperature: %0.1f C" % temp)
-    logging.info("Humidity: %0.1f %%" % temp)
+    logging.info("Humidity: %0.1f %%" % humidity)
 
     sleep(2)
