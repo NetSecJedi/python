@@ -34,22 +34,26 @@ while True:
     #print("Humidity: %0.1f %%" % sensor.relative_humidity)
     
     relay_status = GPIO.input(16) # Check if relay is on, or set to LOW (0)
-    temp = sensor.temperature # read temperature value
+
+    try:
+        temp = sensor.temperature # read temperature value
     
-    # SHT30 temperature values are in Centigrade, 32C is 90F
-    # If temp is above tmp_th_max turn on the relay powering our exhaust fan
-    # until temp reaches tmp_th_min
-    if relay_status == 1 and temp > tmp_th_max:
-        GPIO.output(16, GPIO.LOW)
-        GPIO.output(24, GPIO.HIGH)
-        logging.warning('Fan activated at %0.1f C' % temp)
-    elif relay_status == 0 and temp < tmp_th_min:
-        GPIO.output(16, GPIO.HIGH)
-        GPIO.output(24, GPIO.LOW)
-        logging.warning('Fan Deactivated at %0.1f C' % temp) 
-    else:
-        if relay_status == 0:
-            logging.info('Fan Running')
-            logging.info("Temperature: %0.1f C" % temp)     
+        # SHT30 temperature values are in Centigrade, 32C is 90F
+        # If temp is above tmp_th_max turn on the relay powering our exhaust fan
+        # until temp reaches tmp_th_min
+        if relay_status == 1 and temp > tmp_th_max:
+            GPIO.output(16, GPIO.LOW)
+            GPIO.output(24, GPIO.HIGH)
+            logging.warning('Fan activated at %0.1f C' % temp)
+        elif relay_status == 0 and temp < tmp_th_min:
+            GPIO.output(16, GPIO.HIGH)
+            GPIO.output(24, GPIO.LOW)
+            logging.warning('Fan Deactivated at %0.1f C' % temp) 
+        else:
+            if relay_status == 0:
+                logging.info('Fan Running')
+                logging.info("Temperature: %0.1f C" % temp)
+    except:
+        logging.error("Error reading sensor, retrying....")
 
     sleep(5)
