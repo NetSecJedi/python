@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 from time import sleep
 import logging
+import board
 
 GPIO.setwarnings(False)
 GPIO.setup(25, GPIO.OUT, initial=GPIO.HIGH)
