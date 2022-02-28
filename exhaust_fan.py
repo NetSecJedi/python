@@ -15,21 +15,28 @@ from time import sleep
 import logging
 
 # Set up log file
-logging.basicConfig(filename='fan.log', encoding='utf-8', level=logging.DEBUG)
+logging.basicConfig(filename='/home/pi/fan.log', encoding='utf-8', level=logging.DEBUG)
+
+# Indicate script is starting
+logging.info("Starting Exhaust Fan system...")
+logging.info("Initializing GPIO ports...")
 
 GPIO.setwarnings(False) # Turn off GPIO warnings
 GPIO.setup(16, GPIO.OUT, initial=GPIO.HIGH)  # Relay signal IN1, board pin 36 GPIO 16, default HIGH (off)
 GPIO.setup(25, GPIO.OUT, initial=GPIO.HIGH)  # Green LED indicating System On
 GPIO.setup(24, GPIO.OUT, initial=GPIO.LOW) # Blue LED indicating fan on
 
+logging.info("Initializing Adafruit SHT30 I2C sensor...")
 # Create sensor object to read temp and humidity from SHT30
 i2c = board.I2C()
 sensor = adafruit_sht31d.SHT31D(i2c)
 
+logging.info("Setting Temp max and min values.....")
 tmp_th_max = 21.5 # Set temperature max threshold
 tmp_th_min = 19.5 # Set temperature min threshold
 read_errors = 0 # track read errors
 
+logging.info("Entering system loop, stay fresh...")
 # Wait for 30 seconds when 10 read errors in succession and blink Green LED in half second intervals
 def read_err_wait():
     logging.error("Excessive errors reading temperature sensor, waiting 30 seconds....")
@@ -52,11 +59,11 @@ while True:
         # If temp is above tmp_th_max turn on the relay powering our exhaust fan
         # until temp reaches tmp_th_min
         if relay_status == 1 and temp > tmp_th_max:
-            GPIO.output(16, GPIO.LOW)
+            GPIO.output(16, GPIO.LOW) # turn on fan relay
             GPIO.output(24, GPIO.HIGH)
             logging.warning('Fan activated at %0.1f C' % temp)
         elif relay_status == 0 and temp < tmp_th_min:
-            GPIO.output(16, GPIO.HIGH)
+            GPIO.output(16, GPIO.HIGH) # turn off fan relay
             GPIO.output(24, GPIO.LOW)
             logging.warning('Fan Deactivated at %0.1f C' % temp) 
         else:
