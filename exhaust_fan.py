@@ -32,8 +32,8 @@ i2c = board.I2C()
 sensor = adafruit_sht31d.SHT31D(i2c)
 
 logging.info("Setting Temp max and min values.....")
-tmp_th_max = 21.5 # Set temperature max threshold
-tmp_th_min = 19.5 # Set temperature min threshold
+tmp_th_max = 29.5 # Set temperature max threshold
+tmp_th_min = 27.0 # Set temperature min threshold
 read_errors = 0 # track read errors
 
 logging.info("Entering system loop, stay fresh...")
