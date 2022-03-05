@@ -15,7 +15,7 @@ from time import sleep
 import logging
 
 # Set up log file
-logging.basicConfig(filename='/home/pi/fan.log', encoding='utf-8', level=logging.DEBUG)
+logging.basicConfig(filename='/home/pi/fan.log', encoding='utf-8', format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.DEBUG)
 
 # Indicate script is starting
 logging.info("Starting Exhaust Fan system...")
@@ -47,9 +47,7 @@ def read_err_wait():
         sleep(0.5)
 
 while True: 
-    #print("\nTemperature: %0.1f C" % sensor.temperature)
-    #print("Humidity: %0.1f %%" % sensor.relative_humidity)
-    
+        
     relay_status = GPIO.input(16) # Check if relay is on, or set to LOW (0)
 
     try:
