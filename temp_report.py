@@ -4,7 +4,7 @@ from time import sleep
 import logging
 
 # Set up log file
-logging.basicConfig(filename='/home/pi/temp_hum.log', encoding='utf-8', format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+logging.basicConfig(filename='/home/pi/temp_hum.log', encoding='utf-8', format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
 
 # Create sensor object to read temp and humidity from SHT30
 i2c = board.I2C()
