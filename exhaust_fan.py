@@ -64,10 +64,10 @@ while True:
             GPIO.output(16, GPIO.HIGH) # turn off fan relay
             GPIO.output(24, GPIO.LOW)
             logging.warning('Fan Deactivated at %0.1f C' % temp) 
-        else:
-            if relay_status == 0:
-                logging.info('Fan Running')
-                logging.info("Temperature: %0.1f C" % temp)
+        #else:
+        #    if relay_status == 0:
+        #        logging.info('Fan Running')
+        #        logging.info("Temperature: %0.1f C" % temp)
     except:
         logging.error("Error reading sensor, retrying....")
         read_errors += 1
