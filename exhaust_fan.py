@@ -39,8 +39,8 @@ read_errors = 0 # track read errors
 logging.info("Entering system loop, stay fresh...")
 # Wait for 30 seconds when 10 read errors in succession and blink Green LED in half second intervals
 def read_err_wait():
-    logging.error("Excessive errors reading temperature sensor, waiting 30 seconds....")
-    for x in range(30):
+    logging.error("Excessive errors reading temperature sensor, waiting 60 seconds....")
+    for x in range(60):
         GPIO.output(25, GPIO.LOW)
         sleep(0.5)
         GPIO.output(25, GPIO.HIGH)
@@ -74,4 +74,4 @@ while True:
         if read_errors == 10:
             read_err_wait()
 
-    sleep(5)
+    sleep(30)
