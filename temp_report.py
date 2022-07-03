@@ -4,7 +4,7 @@ from time import sleep
 import logging
 import os
 
-# CPU Temp function
+# CPU Temp function, pilfered from https://www.pragmaticlinux.com/2020/06/check-the-raspberry-pi-cpu-temperature/
 def get_cpu_temp():
     """
     Obtains the current value of the CPU temperature.
