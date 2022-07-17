@@ -8,4 +8,5 @@ def write_syslog(facility = syslog.LOG_INFO, msg = "Message not specified"):
 #logging.info('test INFO message')
 #logging.warning('test WARNING message')
 
-write_syslog(syslog.LOG_ERR, "This is a test message....")
+write_syslog("This is an INFO test message....")
+write_syslog(syslog.LOG_ERR, "This is an ERROR test message...")
