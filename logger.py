@@ -1,5 +1,6 @@
 #import logging
 import write_logs
+import syslog
 
 #logging.basicConfig(filename='fan.log', encoding='utf-8', level=logging.DEBUG)
 #logging.info('test INFO message')
