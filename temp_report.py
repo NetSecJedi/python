@@ -4,6 +4,12 @@ from time import sleep
 import logging
 import syslog
 import os
+import socket
+
+# Set up UDP packet parameters
+IP="airspy"
+PORT=9999
+sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 
 # CPU Temp function, pilfered from https://www.pragmaticlinux.com/2020/06/check-the-raspberry-pi-cpu-temperature/
 def get_cpu_temp():
@@ -26,8 +32,12 @@ def get_cpu_temp():
     # Give the result back to the caller.
     return result
 
+def send_udp(MESSAGE):
+    sock.sendto(MESSAGE.encode(),(IP,PORT))
+
+
 # Set up INFO and DEBUG log files
-logging.basicConfig(filename='/home/pi/temp_hum.log', encoding='utf-8', format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.DEBUG)
+#logging.basicConfig(filename='/home/pi/temp_hum.log', encoding='utf-8', format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.DEBUG)
 
 # Create sensor object to read temp and humidity from SHT30
 i2c = board.I2C()
@@ -37,12 +47,22 @@ try:
     temp = sensor.temperature # read temperature 
     humidity = sensor.relative_humidity # read humidity
 except:
-    logging.error("Error reading sensor, in use")
-    syslog.syslog(syslog.LOG_ERR, "Error reading sensor, in use")
+    ERROR="Error reading sensor, in use"
+    #logging.error(ERROR)
+    syslog.syslog(syslog.LOG_ERR, ERROR)
+    send_udp(ERROR)
 
-logging.info("Temperature: %0.1f C" % temp)
+TEMP="Temperature: %0.1f C" % temp
+HUM="Humidity: %0.1f %%" % humidity
+T_CPU="CPU Temp: {:.2f} C".format(get_cpu_temp())
+
+send_udp(TEMP)
+send_udp(HUM)
+send_udp(T_CPU)
+
+#logging.info("Temperature: %0.1f C" % temp)
 syslog.syslog(syslog.LOG_INFO, "Temperature: %0.1f C" % temp)
-logging.info("Humidity: %0.1f %%" % humidity)
+#logging.info("Humidity: %0.1f %%" % humidity)
 syslog.syslog(syslog.LOG_INFO, "Humidity: %0.1f %%" % humidity)
-logging.info("CPU Temp: {:.2f} C".format(get_cpu_temp()))
+#logging.info("CPU Temp: {:.2f} C".format(get_cpu_temp()))
 syslog.syslog(syslog.LOG_INFO, "CPU Temp: {:.2f} C".format(get_cpu_temp()))
