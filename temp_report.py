@@ -1,8 +1,8 @@
 import board
 import adafruit_sht31d
 from time import sleep
-import logging
-import syslog
+#import logging
+#import syslog
 import os
 import socket
 
@@ -49,7 +49,7 @@ try:
 except:
     ERROR="Error reading sensor, in use"
     #logging.error(ERROR)
-    syslog.syslog(syslog.LOG_ERR, ERROR)
+    #syslog.syslog(syslog.LOG_ERR, ERROR)
     send_udp(ERROR)
 
 TEMP="Temperature: %0.1f C" % temp
@@ -61,8 +61,8 @@ send_udp(HUM)
 send_udp(T_CPU)
 
 #logging.info("Temperature: %0.1f C" % temp)
-syslog.syslog(syslog.LOG_INFO, "Temperature: %0.1f C" % temp)
+#syslog.syslog(syslog.LOG_INFO, "Temperature: %0.1f C" % temp)
 #logging.info("Humidity: %0.1f %%" % humidity)
-syslog.syslog(syslog.LOG_INFO, "Humidity: %0.1f %%" % humidity)
+#syslog.syslog(syslog.LOG_INFO, "Humidity: %0.1f %%" % humidity)
 #logging.info("CPU Temp: {:.2f} C".format(get_cpu_temp()))
-syslog.syslog(syslog.LOG_INFO, "CPU Temp: {:.2f} C".format(get_cpu_temp()))
+#syslog.syslog(syslog.LOG_INFO, "CPU Temp: {:.2f} C".format(get_cpu_temp()))
