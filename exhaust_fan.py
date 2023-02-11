@@ -13,6 +13,15 @@ import adafruit_sht31d
 import RPi.GPIO as GPIO
 from time import sleep
 import syslog
+import socket
+
+# Set up UDP packet parameters
+IP="airspy" #send to our Node Red server
+PORT=10000
+sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+
+def send_udp(MESSAGE):
+    sock.sendto(MESSAGE.encode(),(IP,PORT))
 
 # Indicate script is starting
 syslog.syslog(syslog.LOG_INFO, "Starting Exhaust Fan system...")
@@ -33,10 +42,14 @@ tmp_th_max = 29.5 # Set temperature max threshold
 tmp_th_min = 27.0 # Set temperature min threshold
 read_errors = 0 # track read errors
 
+MESSAGE=""
+
 syslog.syslog(syslog.LOG_INFO, "Entering system loop, stay fresh!")
 # Wait for 30 seconds when 10 read errors in succession and blink Green LED in half second intervals
 def read_err_wait():
-    syslog.syslog(syslog.LOG_ERR, "Excessive errors reading temperature sensor, waiting 60 seconds....")
+    MESSAGE="Excessive errors reading temperature sensor, waiting 60 seconds...."
+    syslog.syslog(syslog.LOG_ERR, MESSAGE )
+    send_udp(MESSAGE)
     for x in range(60):
         GPIO.output(25, GPIO.LOW)
         sleep(0.5)
@@ -51,18 +64,24 @@ while True:
         temp = sensor.temperature # read temperature value
         read_errors = 0
         # SHT30 temperature values are in Centigrade, 32C is 90F
-        # If temp is above tmp_th_max turn on the relay powering our exhaust fan
+        # If temp is above tmp_th_max activate the relay powering our exhaust fan
         # until temp reaches tmp_th_min
         if relay_status == 1 and temp > tmp_th_max:
             GPIO.output(16, GPIO.LOW) # turn on fan relay
             GPIO.output(24, GPIO.HIGH)
-            syslog.syslog(syslog.LOG_INFO, 'Fan activated at %0.1f C' % temp )
+            MESSAGE='Fan activated at %0.1f C' % temp
+            syslog.syslog(syslog.LOG_INFO, MESSAGE )
+            send_udp(MESSAGE)
         elif relay_status == 0 and temp < tmp_th_min:
             GPIO.output(16, GPIO.HIGH) # turn off fan relay
             GPIO.output(24, GPIO.LOW)
-            syslog.syslog(syslog.LOG_INFO, 'Fan Deactivated at %0.1f C' % temp )
+            MESSAGE='Fan Deactivated at %0.1f C' % temp
+            syslog.syslog(syslog.LOG_INFO, MESSAGE )
+            send_udp(MESSAGE)
     except:
-        syslog.syslog(syslog.LOG_ERR, "Error reading sensor, retrying....")
+        MESSAGE="Error reading sensor, retrying...."
+        syslog.syslog(syslog.LOG_ERR, MESSAGE)
+        send_udp(MESSAGE)
         read_errors += 1
         if read_errors == 10:
             read_err_wait()
