@@ -51,8 +51,8 @@ except:
     ERROR={ "Timestamp" : ts.isoformat() , "Error" : "Error reading sensor, in use" }
     send_udp(json.dumps(ERROR))
 
-TEMP="Temperature: %0.1f C" % temp
-HUM="Humidity: %0.1f %%" % humidity
-T_CPU="CPU Temp: {:.2f} C".format(get_cpu_temp())
+TEMP="%0.1f C" % temp
+HUM="%0.1f %%" % humidity
+T_CPU="{:.2f} C".format(get_cpu_temp())
 
 send_udp(format_json(TEMP,HUM,T_CPU))
