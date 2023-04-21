@@ -30,7 +30,7 @@ def format_json(action,msg):
     if action == "Error":
         jsonstr = { "Timestamp" : ts.isoformat(), "Action" : action, "Message": msg }
     else:
-        jsonstr = { "Timestamp" : ts.isoformat(), "Action" : action, "Temperature": msg}   
+        jsonstr = { "Timestamp" : ts.isoformat(), "Action" : action, "Temperature": msg }   
     return json.dumps(jsonstr)
 
 # Indicate script is starting
@@ -58,8 +58,8 @@ syslog.syslog(syslog.LOG_INFO, "Entering system loop, stay fresh!")
 # Wait for 30 seconds when 10 read errors in succession and blink Green LED in half second intervals
 def read_err_wait():
     MESSAGE="Excessive errors reading temperature sensor, waiting 60 seconds...."
-    #syslog.syslog(syslog.LOG_ERR, MESSAGE )
-    send_udp(format_json("Error",MESSAGE))
+    syslog.syslog(syslog.LOG_ERR, MESSAGE )
+    #send_udp(format_json("Error",MESSAGE))
     for x in range(60):
         GPIO.output(25, GPIO.LOW)
         sleep(0.5)
@@ -88,8 +88,8 @@ while True:
             send_udp(format_json("Deactivated",TEMP))
     except:
         MESSAGE="Error reading sensor, retrying...."
-        #syslog.syslog(syslog.LOG_ERR, MESSAGE)
-        send_udp(format_json("Error",MESSAGE))
+        syslog.syslog(syslog.LOG_ERR, MESSAGE)
+        #send_udp(format_json("Error",MESSAGE))
         read_errors += 1
         if read_errors == 10:
             read_err_wait()
