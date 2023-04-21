@@ -7,7 +7,7 @@ import json
 
 # Set up UDP packet parameters
 IP="airspy"
-PORT=9999
+PORT=10000
 sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 
 # CPU Temp function, pilfered from https://www.pragmaticlinux.com/2020/06/check-the-raspberry-pi-cpu-temperature/
@@ -36,7 +36,7 @@ def send_udp(MESSAGE):
 
 def format_json(TEMP,HUM,CPU):
     ts = datetime.now(timezone.utc)
-    jsonstr = { "Timestamp" : ts.isoformat(), "Temperature" : TEMP, "CPU Temp": CPU, "Humidity" : HUM }
+    jsonstr = { "Timestamp" : ts.isoformat(), "Service" : "ENV", "Temperature" : TEMP, "CPU Temp": CPU, "Humidity" : HUM }
     return json.dumps(jsonstr)
 
 # Create sensor object to read temp and humidity from SHT30

@@ -28,9 +28,9 @@ def send_udp(MESSAGE):
 def format_json(action,msg):
     ts = datetime.now(timezone.utc)
     if action == "Error":
-        jsonstr = { "Timestamp" : ts.isoformat(), "Action" : action, "Message": msg }
+        jsonstr = { "Timestamp" : ts.isoformat(), "Service" : "FAN", "Action" : action, "Message": msg }
     else:
-        jsonstr = { "Timestamp" : ts.isoformat(), "Action" : action, "Temperature": msg }   
+        jsonstr = { "Timestamp" : ts.isoformat(), "Service" : "FAN", "Action" : action, "Temperature": msg }   
     return json.dumps(jsonstr)
 
 # Indicate script is starting
