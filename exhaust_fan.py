@@ -29,7 +29,7 @@ def format_json(action,msg):
     ts = datetime.now(timezone.utc)
     if action == "Error":
         jsonstr = { "Timestamp" : ts.isoformat(), "Action" : action, "Message": msg }
-    else
+    else:
         jsonstr = { "Timestamp" : ts.isoformat(), "Action" : action, "Temperature": msg}   
     return json.dumps(jsonstr)
 
