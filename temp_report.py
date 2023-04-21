@@ -48,7 +48,7 @@ try:
     humidity = sensor.relative_humidity # read humidity
 except:
     ts = datetime.now(timezone.utc)
-    ERROR={ "Timestamp" : ts.isoformat() , "Error" : "Error reading sensor, in use" }
+    ERROR = { "Timestamp" : ts.isoformat(), "Error" : "Error reading sensor, in use" }
     send_udp(json.dumps(ERROR))
 
 TEMP="%0.1f C" % temp
