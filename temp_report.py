@@ -1,10 +1,9 @@
 import board
 import adafruit_sht31d
-from time import sleep
-#import logging
-#import syslog
+from datetime import datetime, date, time, timezone
 import os
 import socket
+import json
 
 # Set up UDP packet parameters
 IP="airspy"
@@ -35,9 +34,10 @@ def get_cpu_temp():
 def send_udp(MESSAGE):
     sock.sendto(MESSAGE.encode(),(IP,PORT))
 
-
-# Set up INFO and DEBUG log files
-#logging.basicConfig(filename='/home/pi/temp_hum.log', encoding='utf-8', format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.DEBUG)
+def format_json(TEMP,HUM,CPU):
+    ts = datetime.now(timezone.utc)
+    jsonstr = { "Timestamp" : ts.isoformat(), "Temperature" : TEMP, "CPU Temp": CPU, "Humidity" : HUM}
+    return json.dumps(jsonstr)
 
 # Create sensor object to read temp and humidity from SHT30
 i2c = board.I2C()
@@ -47,22 +47,12 @@ try:
     temp = sensor.temperature # read temperature 
     humidity = sensor.relative_humidity # read humidity
 except:
-    ERROR="Error reading sensor, in use"
-    #logging.error(ERROR)
-    #syslog.syslog(syslog.LOG_ERR, ERROR)
-    send_udp(ERROR)
+    ts = datetime.now(timezone.utc)
+    ERROR={ "Timestamp" : ts.isoformat() , "Error" : "Error reading sensor, in use" }
+    send_udp(json.dumps(ERROR))
 
 TEMP="Temperature: %0.1f C" % temp
 HUM="Humidity: %0.1f %%" % humidity
 T_CPU="CPU Temp: {:.2f} C".format(get_cpu_temp())
 
-send_udp(TEMP)
-send_udp(HUM)
-send_udp(T_CPU)
-
-#logging.info("Temperature: %0.1f C" % temp)
-#syslog.syslog(syslog.LOG_INFO, "Temperature: %0.1f C" % temp)
-#logging.info("Humidity: %0.1f %%" % humidity)
-#syslog.syslog(syslog.LOG_INFO, "Humidity: %0.1f %%" % humidity)
-#logging.info("CPU Temp: {:.2f} C".format(get_cpu_temp()))
-#syslog.syslog(syslog.LOG_INFO, "CPU Temp: {:.2f} C".format(get_cpu_temp()))
+send_udp(format_json(TEMP,HUM,T_CPU))
