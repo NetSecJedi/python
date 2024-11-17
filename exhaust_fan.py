@@ -50,6 +50,7 @@ MESSAGE=""
 # Wait for 30 seconds when 10 read errors in succession and blink Green LED in half second intervals
 def read_err_wait():
     MESSAGE="Excessive errors reading temperature sensor, waiting 60 seconds...."
+
     send_udp(format_json("Error",MESSAGE))
     for x in range(60):
         GPIO.output(25, GPIO.LOW)
