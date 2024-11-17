@@ -14,7 +14,6 @@ import RPi.GPIO as GPIO
 from datetime import datetime, date, time, timezone
 from time import sleep
 import socket
-import syslog
 import json
 
 # Set up UDP packet parameters
@@ -33,33 +32,25 @@ def format_json(action,msg):
         jsonstr = { "Timestamp" : ts.isoformat(), "Service" : "FAN", "Action" : action, "Temperature": msg }   
     return json.dumps(jsonstr)
 
-# Indicate script is starting
-syslog.syslog(syslog.LOG_INFO, "Starting Exhaust Fan system...")
-syslog.syslog(syslog.LOG_INFO, "Initializing GPIO ports...")
-
 GPIO.setwarnings(False) # Turn off GPIO warnings
 GPIO.setup(16, GPIO.OUT, initial=GPIO.HIGH)  # Relay signal IN1, board pin 36 GPIO 16, default HIGH (off)
 GPIO.setup(25, GPIO.OUT, initial=GPIO.HIGH)  # Green LED indicating System On
 GPIO.setup(24, GPIO.OUT, initial=GPIO.LOW) # Blue LED indicating fan on
 
-syslog.syslog(syslog.LOG_INFO, "Initializing Adaruit SHT30 I2C sensor...")
 # Create sensor object to read temp and humidity from SHT30
 i2c = board.I2C()
 sensor = adafruit_sht31d.SHT31D(i2c)
 
-syslog.syslog(syslog.LOG_INFO, "Setting Temp max and min values.....")
 tmp_th_max = 29.5 # Set temperature max threshold
 tmp_th_min = 27.0 # Set temperature min threshold
 read_errors = 0 # track read errors
 
 MESSAGE=""
 
-syslog.syslog(syslog.LOG_INFO, "Entering system loop, stay fresh!")
 # Wait for 30 seconds when 10 read errors in succession and blink Green LED in half second intervals
 def read_err_wait():
     MESSAGE="Excessive errors reading temperature sensor, waiting 60 seconds...."
-    syslog.syslog(syslog.LOG_ERR, MESSAGE )
-    #send_udp(format_json("Error",MESSAGE))
+    send_udp(format_json("Error",MESSAGE))
     for x in range(60):
         GPIO.output(25, GPIO.LOW)
         sleep(0.5)
@@ -88,8 +79,7 @@ while True:
             send_udp(format_json("Deactivated",TEMP))
     except:
         MESSAGE="Error reading sensor, retrying...."
-        syslog.syslog(syslog.LOG_ERR, MESSAGE)
-        #send_udp(format_json("Error",MESSAGE))
+        send_udp(format_json("Error",MESSAGE))
         read_errors += 1
         if read_errors == 10:
             read_err_wait()
