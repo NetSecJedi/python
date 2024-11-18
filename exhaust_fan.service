@@ -1,0 +1,14 @@
+[Unit]
+Description=Exhaust Fan Systemd service 
+After=network-online.target
+
+[Service]
+User=root
+Type=simple
+ExecStart=python /home/ansible/python/exhaust_fan.py
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
