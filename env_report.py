@@ -1,6 +1,7 @@
 import board
 import adafruit_sht31d
 from datetime import datetime, date, time, timezone
+from time import sleep
 from prometheus_client import Gauge, start_http_server
 import os
 import socket
