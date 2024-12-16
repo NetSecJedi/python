@@ -41,7 +41,7 @@ while True:
 
     TEMP="%0.1f C" % temp
     HUM="%0.1f %%" % humidity
-    temp = (temp x 1.8) + 32
+    temp = (temp * 1.8) + 32
     temp_g.set(temp)
     humid_g.set(humidity)
     send_udp(format_json(TEMP,HUM))
