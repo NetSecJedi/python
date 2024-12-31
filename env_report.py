@@ -46,4 +46,4 @@ while True:
     humid_g.set(humidity)
     send_udp(format_json(TEMP,HUM))
 
-    sleep(15)
+    sleep(60)

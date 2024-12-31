@@ -85,4 +85,4 @@ while True:
         if read_errors == 10:
             read_err_wait()
 
-    sleep(30)
+    sleep(60)
