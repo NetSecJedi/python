@@ -16,7 +16,7 @@ def send_udp(MESSAGE):
 
 def format_json(TEMP,HUM):
     ts = datetime.now(timezone.utc)
-    jsonstr = { "Timestamp" : ts.isoformat(), "Service" : "ENV", "Temperature" : TEMP, "Humidity" : HUM }
+    jsonstr = { "Timestamp" : ts.isoformat(), "Service" : "SDR Enclosure", "Temperature" : TEMP, "Humidity" : HUM }
     return json.dumps(jsonstr)
 
 # Create smbus sensor object to read temp and humidity from SHT30
