@@ -7,7 +7,7 @@ import socket
 import json
 
 # Set up UDP packet parameters
-IP="airspy"
+IP="airspy.nawimsaying.com"
 PORT=10000
 sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 
