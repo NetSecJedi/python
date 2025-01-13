@@ -1,4 +1,3 @@
-import board
 import smbus
 from datetime import datetime, date, time, timezone
 from time import sleep
