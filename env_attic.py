@@ -24,7 +24,7 @@ def format_json(TEMP,HUM,SERVICE):
 # Create sensor objects to read temp and humidity from SHT sensors
 i2c = board.I2C()
 sdr_sensor = adafruit_sht31d.SHT31D(i2c) # SHT31D Sensor located inside SDR Enclosure
-attic_sensor = adafruit_shtc3(i2c) # SHTC3 Sensor exposed to attic cavity
+attic_sensor = adafruit_shtc3.SHTC3(i2c) # SHTC3 Sensor exposed to attic cavity
 
 # Set up Prometheus Gauges and metrics http server
 sdr_temp_g = Gauge('sdr_temp_gauge', 'SDR Enclosure Temperature')
