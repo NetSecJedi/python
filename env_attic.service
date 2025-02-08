@@ -1,0 +1,14 @@
+[Unit]
+Description=Attic and SDR Enclosure Metrics Report Systemd service 
+After=network-online.target
+
+[Service]
+User=root
+Type=simple
+ExecStart=python /home/ansible/python/env_attic.py
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
